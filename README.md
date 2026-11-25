@@ -56,29 +56,34 @@ VoxSales AI integrates a dedicated 4-pillar AI pipeline designed for ultra-low l
 ## System Architecture
 
 ```mermaid
-flowchart LR
-    subgraph S1 ["1. VOICE INPUT (STT)"]
-        User(["👤 Candidate"]) -->|"Speaks Query"| Mic["🎙️ Web Speech API (STT)"]
-        Mic -->|"Transcribed Text"| Frontend["💻 React 19 Frontend"]
+flowchart TD
+    subgraph S1 ["1. VOICE INPUT LAYER (STT)"]
+        User(["👤 Prospective Student"]) -->|"1. Speaks Query"| Mic["🎙️ Web Speech API (STT)"]
+        Mic -->|"2. Transcribed Text"| Frontend["💻 React 19 + Vite Frontend"]
     end
 
-    subgraph S2 ["2. KNOWLEDGE RETRIEVAL (RAG)"]
-        Frontend -->|"POST /api/agent/interact"| API["⚡ FastAPI Backend"]
-        API -->|"Query Embedding"| Embed["🔍 Sentence Transformers\n(all-MiniLM-L6-v2)"]
-        Embed -->|"Vector Search"| FAISS[("📚 FAISS Vector DB\n(Course Syllabi & Fees)")]
-        FAISS -->|"Top Verified Facts"| Engine["🧠 Context Builder"]
+    Frontend -->|"3. HTTP POST /api/agent/interact"| API
+
+    subgraph S2 ["2. KNOWLEDGE RETRIEVAL LAYER (RAG)"]
+        API["⚡ FastAPI Backend Engine"] -->|"4. Dense Embedding"| SBERT["🔍 Sentence Transformers (all-MiniLM-L6-v2)"]
+        SBERT -->|"5. 384-dim Vector Query"| FAISS[("📚 Meta FAISS Vector DB\n(Course Syllabi, Fees, Durations)")]
+        FAISS -->|"6. Top-3 Verified Facts"| Context["🧠 RAG Context Builder"]
     end
 
-    subgraph S3 ["3. INTELLIGENCE (LLM & SCORING)"]
-        Engine -->|"Query + Course Facts"| LLM["⚡ Groq LPU (300ms)\n/ Gemini 2.5 Flash"]
-        LLM -->|"Generated Voice Reply"| Scorer["📊 Lead Scorer\n(Hot / Warm / Cold | 0-100)"]
+    Context -->|"7. Prompt + Grounded Facts"| LLM
+
+    subgraph S3 ["3. INTELLIGENCE & QUALIFICATION LAYER (LLM)"]
+        LLM["⚡ Groq LPU Engine (Sub-300ms) / Gemini 2.5 Flash"] -->|"8. Voice-Ready Sales Reply"| Scorer["📊 Rule-Based Lead Scorer"]
+        Scorer -->|"9. Intent Classification: Hot / Warm / Cold (0–100)"| Scorer
     end
 
-    subgraph S4 ["4. STORAGE & VOICE OUTPUT (TTS)"]
-        Scorer -->|"Persist Lead & Transcript"| Mongo[("🍃 MongoDB\n(Leads & Appointments)")]
-        Scorer -->|"JSON Response"| Frontend
-        Frontend -->|"Natural Audio"| TTS["🔊 SpeechSynthesis (TTS)"]
-        TTS -->|"Speaks Answer"| User
+    Scorer -->|"10. Persist Lead, Sentiment & Transcript"| Mongo[("🍃 MongoDB Database (voxsales_db)")]
+    Scorer -->|"11. Return JSON Response"| Frontend
+
+    subgraph S4 ["4. VOICE OUTPUT & CRM LAYER (TTS)"]
+        Frontend -->|"12. Audio Synthesis"| TTS["🔊 Browser SpeechSynthesis (TTS)"]
+        TTS -->|"13. Spoken Voice Response"| User
+        Mongo -->|"14. Real-time Aggregation"| CRM["📈 Live Executive Overview & Call History"]
     end
 
     style S1 fill:#f0f9ff,stroke:#0284c7,stroke-width:2px
