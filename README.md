@@ -53,7 +53,7 @@ VoxSales AI integrates a dedicated 4-pillar AI pipeline designed for ultra-low l
 
 ---
 
-## End-to-End Customer Workflow
+## System Architecture
 
 ```mermaid
 flowchart TD
