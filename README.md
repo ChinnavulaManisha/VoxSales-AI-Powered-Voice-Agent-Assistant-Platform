@@ -56,34 +56,43 @@ VoxSales AI integrates a dedicated 4-pillar AI pipeline designed for ultra-low l
 ## System Architecture
 
 ```mermaid
-flowchart TD
-    User([Prospective Student]) -->|Voice / Text| UI[React + Vite Frontend]
-    
-    subgraph Client_Browser [Client Browser]
-        UI -->|Mic Stream| STT[Web Speech API STT]
-        STT -->|Transcribed Text| UI
-        TTS[SpeechSynthesis API] -->|Voice Output| User
+flowchart LR
+    subgraph S1 ["1. VOICE INPUT (STT)"]
+        User(["👤 Candidate"]) -->|"Speaks Query"| Mic["🎙️ Web Speech API (STT)"]
+        Mic -->|"Transcribed Text"| Frontend["💻 React 19 Frontend"]
     end
 
-    UI -->|HTTP POST /api/agent/interact| API[FastAPI Backend Server]
-    
-    subgraph Backend_Engine [FastAPI Backend Service]
-        API --> RAG[RAG Pipeline]
-        RAG -->|Vector Embeddings| ST[SentenceTransformers all-MiniLM-L6-v2]
-        ST -->|Dense Vector Query| FAISS[(FAISS IndexFlatIP)]
-        FAISS -->|Top-3 Course Chunks| RAG
-        
-        RAG --> AI_Engine[Gemini AI / Intelligent Counselor]
-        AI_Engine --> Scorer[Rule-Based Lead Scorer]
-        Scorer --> DB_Layer[(MongoDB Database)]
+    subgraph S2 ["2. KNOWLEDGE RETRIEVAL (RAG)"]
+        Frontend -->|"POST /api/agent/interact"| API["⚡ FastAPI Backend"]
+        API -->|"Query Embedding"| Embed["🔍 Sentence Transformers\n(all-MiniLM-L6-v2)"]
+        Embed -->|"Vector Search"| FAISS[("📚 FAISS Vector DB\n(Course Syllabi & Fees)")]
+        FAISS -->|"Top Verified Facts"| Engine["🧠 Context Builder"]
     end
 
-    DB_Layer -->|Persist Lead & Transcript| LeadsCol[Collections: leads, conversations]
-    DB_Layer -->|Atomic Slot Claim| ApptsCol[Collections: slots, appointments]
-    
-    API -->|Assistant Reply + RAG Sources + Lead Metrics| UI
-    UI -->|Speak Text| TTS
+    subgraph S3 ["3. INTELLIGENCE (LLM & SCORING)"]
+        Engine -->|"Query + Course Facts"| LLM["⚡ Groq LPU (300ms)\n/ Gemini 2.5 Flash"]
+        LLM -->|"Generated Voice Reply"| Scorer["📊 Lead Scorer\n(Hot / Warm / Cold | 0-100)"]
+    end
+
+    subgraph S4 ["4. STORAGE & VOICE OUTPUT (TTS)"]
+        Scorer -->|"Persist Lead & Transcript"| Mongo[("🍃 MongoDB\n(Leads & Appointments)")]
+        Scorer -->|"JSON Response"| Frontend
+        Frontend -->|"Natural Audio"| TTS["🔊 SpeechSynthesis (TTS)"]
+        TTS -->|"Speaks Answer"| User
+    end
+
+    style S1 fill:#f0f9ff,stroke:#0284c7,stroke-width:2px
+    style S2 fill:#f5f3ff,stroke:#7c3aed,stroke-width:2px
+    style S3 fill:#fffbeb,stroke:#d97706,stroke-width:2px
+    style S4 fill:#ecfdf5,stroke:#059669,stroke-width:2px
 ```
+
+### 💡 How to Explain This Architecture in 30 Seconds:
+> *"The system works in 4 clean, sequential stages:"*
+> 1. **Voice Capture (STT):** The candidate speaks into the browser microphone, and the native **Web Speech API** instantly converts speech into text.
+> 2. **Knowledge Retrieval (RAG):** The text query hits **FastAPI**, where **Sentence Transformers** encodes it into a 384-dimensional vector, and **Meta FAISS** retrieves the exact course facts (fees, duration, syllabus) to eliminate hallucinations.
+> 3. **Intelligence (LLM & Scoring):** The verified facts are passed to **Groq LPU** (or **Gemini**) for ultra-fast (sub-300ms) voice response generation, while the **Rule Scorer** evaluates student buying intent from 0 to 100 (*Hot / Warm / Cold*).
+> 4. **Storage & Voice Vocalization (TTS):** The conversation and lead score are saved into **MongoDB**, and the browser speaks the reply out loud using **SpeechSynthesis (TTS)**.
 
 ---
 
