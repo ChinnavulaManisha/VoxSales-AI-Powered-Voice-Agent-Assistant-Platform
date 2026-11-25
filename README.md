@@ -53,34 +53,39 @@ VoxSales AI integrates a dedicated 4-pillar AI pipeline designed for ultra-low l
 
 ---
 
-## System Architecture
+## End-to-End Customer Workflow
 
 ```mermaid
 flowchart TD
-    A["🎙️ 1. STT (Speech-to-Text)\nCandidate Voice ➔ Text via Web Speech API"]
-    B["📚 2. RAG (Knowledge Retrieval)\nSentence Transformers + FAISS Vector Search"]
-    C["⚡ 3. LLM (AI Inference & Scoring)\nGroq LPU / Gemini + 0–100 Rule-Based Scorer"]
-    D["🔊 4. TTS (Voice Response)\nSpeechSynthesis Speaks Natural Audio Reply"]
-    E["🍃 5. Database & CRM (MongoDB)\nSaves Leads, Transcripts & Real-Time Dashboard"]
+    Customer(["👤 Customer / Student"]) -->|"1. Speaks or types inquiry (Fees, Syllabus, Batches)"| VoiceAgent["🤖 VoxSales AI Agent (STT Speech Recognition)"]
+    
+    VoiceAgent -->|"2. Semantic Vector Search"| RAG["📚 RAG Knowledge Base (FAISS Vector Index)"]
+    RAG -->|"3. Verified Curriculum & Pricing Facts"| AI["🧠 LLM Inference (Groq LPU / Gemini)"]
+    
+    AI -->|"4. Speaks natural audio answer aloud (TTS)"| Customer
+    
+    AI -->|"5. Analyzes buying signals & intent"| Scorer["📊 Lead Scorer (Hot / Warm / Cold | 0–100)"]
+    
+    Scorer -->|"6. Confirms counseling appointment slot"| Booking["📅 Counseling Appointment Booking"]
+    
+    Booking -->|"7. Real-time persistence"| CRM[("🍃 MongoDB CRM & Live Executive Dashboard")]
 
-    A --> B
-    B --> C
-    C --> D
-    C --> E
-
-    style A fill:#f0f9ff,stroke:#0284c7,stroke-width:2px
-    style B fill:#f5f3ff,stroke:#7c3aed,stroke-width:2px
-    style C fill:#fffbeb,stroke:#d97706,stroke-width:2px
-    style D fill:#fdf4ff,stroke:#c026d3,stroke-width:2px
-    style E fill:#ecfdf5,stroke:#059669,stroke-width:2px
+    style Customer fill:#e0f2fe,stroke:#0284c7,stroke-width:2px
+    style VoiceAgent fill:#ede9fe,stroke:#7c3aed,stroke-width:2px
+    style RAG fill:#fef3c7,stroke:#d97706,stroke-width:2px
+    style AI fill:#ffedd5,stroke:#ea580c,stroke-width:2px
+    style Scorer fill:#fce7f3,stroke:#db2777,stroke-width:2px
+    style Booking fill:#f0fdf4,stroke:#16a34a,stroke-width:2px
+    style CRM fill:#f8fafc,stroke:#475569,stroke-width:2px
 ```
 
-### 💡 How to Explain This Architecture in 30 Seconds:
-> *"The system works in 4 clean, sequential stages:"*
-> 1. **Voice Capture (STT):** The candidate speaks into the browser microphone, and the native **Web Speech API** instantly converts speech into text.
-> 2. **Knowledge Retrieval (RAG):** The text query hits **FastAPI**, where **Sentence Transformers** encodes it into a 384-dimensional vector, and **Meta FAISS** retrieves the exact course facts (fees, duration, syllabus) to eliminate hallucinations.
-> 3. **Intelligence (LLM & Scoring):** The verified facts are passed to **Groq LPU** (or **Gemini**) for ultra-fast (sub-300ms) voice response generation, while the **Rule Scorer** evaluates student buying intent from 0 to 100 (*Hot / Warm / Cold*).
-> 4. **Storage & Voice Vocalization (TTS):** The conversation and lead score are saved into **MongoDB**, and the browser speaks the reply out loud using **SpeechSynthesis (TTS)**.
+### 💡 How to Explain This Customer Workflow in 30 Seconds:
+> *"The student discovery workflow is simple and automated in 5 steps:*
+> 1. **Customer Speaks:** The prospective student verbally asks about fees, course duration, or placements.
+> 2. **AI Retrieves Facts (RAG):** The system searches official course documents using **FAISS** to guarantee accurate answers without hallucinations.
+> 3. **Instant Voice Reply (LLM + TTS):** **Groq LPU / Gemini** generates a friendly response, and the browser speaks it aloud to the customer.
+> 4. **Lead Qualification:** The student's buying intent is scored automatically from 0 to 100 (*Hot, Warm, or Cold*).
+> 5. **Appointment & CRM Sync:** If the student wants to speak with an advisor, a 1-on-1 counseling slot is confirmed and permanently synced into **MongoDB** and the live dashboard.*"
 
 ---
 
