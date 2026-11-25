@@ -1,14 +1,13 @@
 # VoxSales AI – Autonomous AI Sales Voice Agent
 
-[![Groq LPU](https://img.shields.io/badge/Groq_LPU-Ultra--Fast_Inference-F05A28?style=flat-square&logo=groq&logoColor=white)](https://groq.com)
-[![Google Gemini](https://img.shields.io/badge/Google_Gemini-2.5_Flash-4285F4?style=flat-square&logo=googlegemini&logoColor=white)](https://ai.google.dev)
-[![FAISS](https://img.shields.io/badge/FAISS-Meta_Vector_Search-0081FB?style=flat-square)](https://github.com/facebookresearch/faiss)
-[![Sentence Transformers](https://img.shields.io/badge/Sentence_Transformers-all--MiniLM--L6--v2-orange?style=flat-square)](https://www.sbert.net)
+[![STT](https://img.shields.io/badge/STT-Web_Speech_Recognition-8A2BE2?style=flat-square)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
+[![TTS](https://img.shields.io/badge/TTS-Speech_Synthesis_Audio-9333EA?style=flat-square)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
+[![LLM](https://img.shields.io/badge/LLM-Groq_LPU_%7C_Gemini_2.5_Flash-F05A28?style=flat-square&logo=groq&logoColor=white)](https://groq.com)
+[![RAG](https://img.shields.io/badge/RAG-FAISS_%2B_Sentence_Transformers-0081FB?style=flat-square)](https://github.com/facebookresearch/faiss)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=FastAPI&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React_19-Vite-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![MongoDB](https://img.shields.io/badge/MongoDB-8.x-green?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com)
-[![Web Speech API](https://img.shields.io/badge/Web_Speech_API-STT_%26_TTS-8A2BE2?style=flat-square)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
 
 **VoxSales AI** is an autonomous AI-powered sales voice assistant designed for an online education platform (Fortivex Education). The assistant converses with prospective students, answers course queries accurately using **RAG (FAISS + Sentence Transformers)**, qualifies leads through a transparent rule-based scoring engine, extracts contact details with consent, and books 1-on-1 counseling appointments into **MongoDB** with strict concurrency and duplicate-prevention controls.
 
@@ -41,33 +40,16 @@
 
 ---
 
-## AI Tools & Intelligence Architecture
+## AI Tools & Architecture (STT, TTS, LLM, RAG)
 
-VoxSales AI combines a layered AI pipeline designed for ultra-low latency and grounded sales accuracy:
+VoxSales AI integrates a dedicated 4-pillar AI pipeline designed for ultra-low latency, natural voice interactions, and strictly grounded course information:
 
-1. **Groq LPU (Language Processing Unit)**:
-   - Provides near-instantaneous inference (~200–300ms time-to-first-token) using specialized LPUs.
-   - Powers the real-time voice sales agent so spoken replies feel conversational and human without lag.
-   - Uses open-weights models such as `qwen/qwen3.8-27b` and `llama-3.3-70b-versatile`.
-
-2. **Google Gemini 2.5 Flash**:
-   - Secondary high-intelligence model for complex multi-lingual code-mixed dialogues and structured lead extraction.
-   - Configurable live from the UI without restarting servers.
-
-3. **Meta FAISS (Facebook AI Similarity Search)**:
-   - In-memory vector index (`IndexFlatIP`) storing normalized embeddings for all course modules, fees, prerequisites, and placement statistics.
-   - Eliminates hallucinations by strictly grounding responses in official course facts.
-
-4. **Hugging Face Sentence Transformers (`all-MiniLM-L6-v2`)**:
-   - Encodes curriculum chunks and incoming user queries into a shared 384-dimensional vector space for high-precision semantic matching.
-
-5. **Client-Side Speech AI (Web Speech API)**:
-   - Zero-latency Speech-to-Text (`SpeechRecognition`) supporting English (India), Telugu, Hindi, Tamil, Kannada, and Malayalam.
-   - Native SpeechSynthesis audio output with smooth speech rate and natural cadence.
-
-6. **Hybrid Lead Qualification & Sentiment Engine**:
-   - Combines LLM sentiment classification (`Positive`, `Neutral`, `Negative`) with a transparent 0–100 rubric.
-   - Automatically penalizes disinterest (e.g. *"I don't want courses"* drops score to 0 / Cold) and elevates buying signals (fees, enrollment, appointments) to Hot (≥70).
+| Pillar | Technology | Implementation & Capabilities |
+| :--- | :--- | :--- |
+| **STT** (Speech-to-Text) | **Browser Web Speech API** (`SpeechRecognition`) | Real-time continuous voice recognition supporting multilingual speech (English, Hindi, Telugu, Tamil, Kannada, Malayalam). Zero network transit delay. |
+| **TTS** (Text-to-Speech) | **Browser SpeechSynthesis API** | Instant conversational voice playback with natural cadence, Indian English accent support, auto-speak, and mid-sentence stop/interrupt controls. |
+| **LLM** (Large Language Model) | **Groq LPU Engine + Google Gemini 2.5 Flash** | **Groq LPU**: Sub-300ms ultra-fast inference with `qwen/qwen3.8-27b` and `llama-3.3-70b-versatile` for live voice streaming.<br>**Gemini 2.5 Flash**: Consultative sales logic, sentiment classification, and structured prospect detail extraction. |
+| **RAG** (Retrieval-Augmented Generation) | **Meta FAISS + Sentence Transformers (`all-MiniLM-L6-v2`)** | 384-dimensional dense semantic vector space with `IndexFlatIP` cosine similarity search over official academy syllabi, preventing hallucinations. |
 
 ---
 
