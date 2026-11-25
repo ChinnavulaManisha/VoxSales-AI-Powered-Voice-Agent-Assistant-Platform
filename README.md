@@ -105,6 +105,7 @@ flowchart TD
    - Confirmed bookings table with candidate details and timestamps.
 5. **Knowledge Base (`/knowledge`)**:
    - Interactive **FAISS Cosine Similarity Simulator**: type any query to see vector search latency (ms), retrieved chunks, and scores.
+     
    - Complete curricula, pricing, EMI options, and placement policies for:
      - Python Programming & Automation
      - Java Enterprise & Microservices
