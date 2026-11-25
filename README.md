@@ -57,39 +57,22 @@ VoxSales AI integrates a dedicated 4-pillar AI pipeline designed for ultra-low l
 
 ```mermaid
 flowchart TD
-    subgraph S1 ["1. VOICE INPUT LAYER (STT)"]
-        User(["👤 Prospective Student"]) -->|"1. Speaks Query"| Mic["🎙️ Web Speech API (STT)"]
-        Mic -->|"2. Transcribed Text"| Frontend["💻 React 19 + Vite Frontend"]
-    end
+    A["🎙️ 1. STT (Speech-to-Text)\nCandidate Voice ➔ Text via Web Speech API"]
+    B["📚 2. RAG (Knowledge Retrieval)\nSentence Transformers + FAISS Vector Search"]
+    C["⚡ 3. LLM (AI Inference & Scoring)\nGroq LPU / Gemini + 0–100 Rule-Based Scorer"]
+    D["🔊 4. TTS (Voice Response)\nSpeechSynthesis Speaks Natural Audio Reply"]
+    E["🍃 5. Database & CRM (MongoDB)\nSaves Leads, Transcripts & Real-Time Dashboard"]
 
-    Frontend -->|"3. HTTP POST /api/agent/interact"| API
+    A --> B
+    B --> C
+    C --> D
+    C --> E
 
-    subgraph S2 ["2. KNOWLEDGE RETRIEVAL LAYER (RAG)"]
-        API["⚡ FastAPI Backend Engine"] -->|"4. Dense Embedding"| SBERT["🔍 Sentence Transformers (all-MiniLM-L6-v2)"]
-        SBERT -->|"5. 384-dim Vector Query"| FAISS[("📚 Meta FAISS Vector DB\n(Course Syllabi, Fees, Durations)")]
-        FAISS -->|"6. Top-3 Verified Facts"| Context["🧠 RAG Context Builder"]
-    end
-
-    Context -->|"7. Prompt + Grounded Facts"| LLM
-
-    subgraph S3 ["3. INTELLIGENCE & QUALIFICATION LAYER (LLM)"]
-        LLM["⚡ Groq LPU Engine (Sub-300ms) / Gemini 2.5 Flash"] -->|"8. Voice-Ready Sales Reply"| Scorer["📊 Rule-Based Lead Scorer"]
-        Scorer -->|"9. Intent Classification: Hot / Warm / Cold (0–100)"| Scorer
-    end
-
-    Scorer -->|"10. Persist Lead, Sentiment & Transcript"| Mongo[("🍃 MongoDB Database (voxsales_db)")]
-    Scorer -->|"11. Return JSON Response"| Frontend
-
-    subgraph S4 ["4. VOICE OUTPUT & CRM LAYER (TTS)"]
-        Frontend -->|"12. Audio Synthesis"| TTS["🔊 Browser SpeechSynthesis (TTS)"]
-        TTS -->|"13. Spoken Voice Response"| User
-        Mongo -->|"14. Real-time Aggregation"| CRM["📈 Live Executive Overview & Call History"]
-    end
-
-    style S1 fill:#f0f9ff,stroke:#0284c7,stroke-width:2px
-    style S2 fill:#f5f3ff,stroke:#7c3aed,stroke-width:2px
-    style S3 fill:#fffbeb,stroke:#d97706,stroke-width:2px
-    style S4 fill:#ecfdf5,stroke:#059669,stroke-width:2px
+    style A fill:#f0f9ff,stroke:#0284c7,stroke-width:2px
+    style B fill:#f5f3ff,stroke:#7c3aed,stroke-width:2px
+    style C fill:#fffbeb,stroke:#d97706,stroke-width:2px
+    style D fill:#fdf4ff,stroke:#c026d3,stroke-width:2px
+    style E fill:#ecfdf5,stroke:#059669,stroke-width:2px
 ```
 
 ### 💡 How to Explain This Architecture in 30 Seconds:
