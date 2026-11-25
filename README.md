@@ -79,14 +79,6 @@ flowchart TD
     style CRM fill:#f8fafc,stroke:#475569,stroke-width:2px
 ```
 
-### 💡 How to Explain This Customer Workflow in 30 Seconds:
-> *"The student discovery workflow is simple and automated in 5 steps:*
-> 1. **Customer Speaks:** The prospective student verbally asks about fees, course duration, or placements.
-> 2. **AI Retrieves Facts (RAG):** The system searches official course documents using **FAISS** to guarantee accurate answers without hallucinations.
-> 3. **Instant Voice Reply (LLM + TTS):** **Groq LPU / Gemini** generates a friendly response, and the browser speaks it aloud to the customer.
-> 4. **Lead Qualification:** The student's buying intent is scored automatically from 0 to 100 (*Hot, Warm, or Cold*).
-> 5. **Appointment & CRM Sync:** If the student wants to speak with an advisor, a 1-on-1 counseling slot is confirmed and permanently synced into **MongoDB** and the live dashboard.*"
-
 ---
 
 ## 5 Application Pages Overview
