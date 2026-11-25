@@ -1,11 +1,14 @@
 # VoxSales AI – Autonomous AI Sales Voice Agent
 
+[![Groq LPU](https://img.shields.io/badge/Groq_LPU-Ultra--Fast_Inference-F05A28?style=flat-square&logo=groq&logoColor=white)](https://groq.com)
+[![Google Gemini](https://img.shields.io/badge/Google_Gemini-2.5_Flash-4285F4?style=flat-square&logo=googlegemini&logoColor=white)](https://ai.google.dev)
+[![FAISS](https://img.shields.io/badge/FAISS-Meta_Vector_Search-0081FB?style=flat-square)](https://github.com/facebookresearch/faiss)
+[![Sentence Transformers](https://img.shields.io/badge/Sentence_Transformers-all--MiniLM--L6--v2-orange?style=flat-square)](https://www.sbert.net)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=FastAPI&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React_19-Vite-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-[![FAISS](https://img.shields.io/badge/FAISS-Meta_Vector_Search-0081FB?style=flat-square)](https://github.com/facebookresearch/faiss)
-[![Sentence Transformers](https://img.shields.io/badge/Sentence_Transformers-all--MiniLM--L6--v2-orange?style=flat-square)](https://www.sbert.net)
 [![MongoDB](https://img.shields.io/badge/MongoDB-8.x-green?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com)
+[![Web Speech API](https://img.shields.io/badge/Web_Speech_API-STT_%26_TTS-8A2BE2?style=flat-square)](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
 
 **VoxSales AI** is an autonomous AI-powered sales voice assistant designed for an online education platform (Fortivex Education). The assistant converses with prospective students, answers course queries accurately using **RAG (FAISS + Sentence Transformers)**, qualifies leads through a transparent rule-based scoring engine, extracts contact details with consent, and books 1-on-1 counseling appointments into **MongoDB** with strict concurrency and duplicate-prevention controls.
 
@@ -25,14 +28,46 @@
 
 | Layer | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Frontend** | React 19 + Vite + Tailwind CSS | SaaS dashboard, interactive audio wave, transcripts |
-| **Icons & Styling** | Lucide React | Modern SaaS typography and responsive components |
-| **Backend** | Python 3.14 + FastAPI + Uvicorn | High-performance asynchronous REST API |
-| **Vector RAG** | Sentence Transformers (`all-MiniLM-L6-v2`) + FAISS | Dense vector cosine similarity search over course syllabus |
-| **Database** | MongoDB 8.x (`voxsales_db`) | Collections: `leads`, `conversations`, `appointments`, `slots` |
-| **Speech-to-Text (STT)** | Browser Web Speech API (`SpeechRecognition`) | Zero-latency client-side microphone transcription |
-| **Text-to-Speech (TTS)** | Browser SpeechSynthesis API | Natural voice audio generation with mute/interrupt control |
-| **AI LLM** | Google Gemini API (`gemini-2.5-flash`) | Contextual conversational generation & sales consultation |
+| **Primary Inference** | **Groq LPU Engine** (`qwen/qwen3.8-27b`, `llama-3.3-70b`) | Ultra-fast ~200–300ms conversational inference for voice streaming |
+| **Secondary LLM** | **Google Gemini API** (`gemini-2.5-flash`, `gemini-1.5-flash`) | Advanced multi-turn conversational reasoning & consultative sales |
+| **Vector RAG Embeddings** | **Hugging Face Sentence Transformers** (`all-MiniLM-L6-v2`) | Dense semantic embeddings (384-dim) over course syllabus chunks |
+| **Vector Database** | **Meta FAISS** (`IndexFlatIP`) | Real-time dense inner-product vector similarity search |
+| **Speech-to-Text (STT)** | **Browser Web Speech API** (`SpeechRecognition`) | Real-time client-side multilingual voice capture (English, Telugu, Hindi, etc.) |
+| **Text-to-Speech (TTS)** | **Browser SpeechSynthesis API** | Natural voice audio playback with auto-speak and interrupt controls |
+| **Frontend** | **React 19 + Vite + Tailwind CSS** | SaaS dashboard, voice orb, candidate registration, and CRM tables |
+| **Icons & UI** | **Lucide React** | Modern SaaS icons, charts, and responsive interactive elements |
+| **Backend** | **Python 3.14 + FastAPI + Uvicorn** | High-performance asynchronous REST API with ThreadPoolExecutor |
+| **Database** | **MongoDB 8.x** (`voxsales_db`) | Collections: `leads`, `conversations`, `appointments`, `slots` |
+
+---
+
+## AI Tools & Intelligence Architecture
+
+VoxSales AI combines a layered AI pipeline designed for ultra-low latency and grounded sales accuracy:
+
+1. **Groq LPU (Language Processing Unit)**:
+   - Provides near-instantaneous inference (~200–300ms time-to-first-token) using specialized LPUs.
+   - Powers the real-time voice sales agent so spoken replies feel conversational and human without lag.
+   - Uses open-weights models such as `qwen/qwen3.8-27b` and `llama-3.3-70b-versatile`.
+
+2. **Google Gemini 2.5 Flash**:
+   - Secondary high-intelligence model for complex multi-lingual code-mixed dialogues and structured lead extraction.
+   - Configurable live from the UI without restarting servers.
+
+3. **Meta FAISS (Facebook AI Similarity Search)**:
+   - In-memory vector index (`IndexFlatIP`) storing normalized embeddings for all course modules, fees, prerequisites, and placement statistics.
+   - Eliminates hallucinations by strictly grounding responses in official course facts.
+
+4. **Hugging Face Sentence Transformers (`all-MiniLM-L6-v2`)**:
+   - Encodes curriculum chunks and incoming user queries into a shared 384-dimensional vector space for high-precision semantic matching.
+
+5. **Client-Side Speech AI (Web Speech API)**:
+   - Zero-latency Speech-to-Text (`SpeechRecognition`) supporting English (India), Telugu, Hindi, Tamil, Kannada, and Malayalam.
+   - Native SpeechSynthesis audio output with smooth speech rate and natural cadence.
+
+6. **Hybrid Lead Qualification & Sentiment Engine**:
+   - Combines LLM sentiment classification (`Positive`, `Neutral`, `Negative`) with a transparent 0–100 rubric.
+   - Automatically penalizes disinterest (e.g. *"I don't want courses"* drops score to 0 / Cold) and elevates buying signals (fees, enrollment, appointments) to Hot (≥70).
 
 ---
 
